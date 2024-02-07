@@ -20,9 +20,9 @@ export default function AddUserScreen({navigation}) {
     const removeValue = async (key, value) => {
         try {
             const jsonValue = await AsyncStorage.getItem(key);
-            const data = jsonValue != null ? JSON.parse(jsonValue) : [];
-            const newData = data.filter(item => item !== value);
-            await AsyncStorage.setItem(key, JSON.stringify(newData));
+            let data = jsonValue != null ? JSON.parse(jsonValue) : [];
+            data = data.filter(item => item !== value);
+            await AsyncStorage.setItem(key, JSON.stringify(data));
         } catch (e) {
             console.log('Error removing ' + value.toString() + ' from ' + key + ': ', e);
         }
@@ -50,7 +50,7 @@ export default function AddUserScreen({navigation}) {
                 />
                 <View style={styles.gridRow}>
                     <Button style={styles.button} color="red" title="Annuleer" onPress={() => navigation.goBack()}/>
-                    <Button style={styles.button} color="red" title="Verwijder" onPress={() => navigation.goBack()}/>
+                    <Button style={styles.button} color="red" title="Verwijder" onPress={removeUser}/>
                     <Button style={styles.button} title="Voeg toe" onPress={addUser}/>
                 </View>
             </View>

@@ -13,10 +13,9 @@ export default function LoginScreen({navigation}) {
     const fetchData = async () => {
         try {
             setUsernames(await getData());
-            console.log('Fetched data:', usernames);
             setLoading(false);
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        } catch (e) {
+            console.error('Error fetching data:', e);
         }
     };
 

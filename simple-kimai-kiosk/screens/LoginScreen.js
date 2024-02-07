@@ -10,20 +10,21 @@ export default function LoginScreen({navigation}) {
     const [selectedUsername, setSelectedUsername] = useState(null);
     const [password, setPassword] = useState('');
 
+    const fetchData = async () => {
+        try {
+            setUsernames(await getData());
+            console.log('Fetched data:', usernames);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    console.log('Fetching data...');
-                    setUsernames(await getData());
-                    console.log('Fetched data:', usernames);
-                    setLoading(false);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
+        return navigation.addListener('focus', () => {
             fetchData();
-        }, []
-    );
+        });
+    });
 
 
     const getData = async () => {
@@ -45,8 +46,8 @@ export default function LoginScreen({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Button style={styles.addUserBtn} title={'Voeg gebruiker toe'}
-                    onPress={() => navigation.navigate('Gebruiker toevoegen')}/>
+            <Button style={styles.addUserBtn} title={'Gebruikers aanpassen'}
+                    onPress={() => navigation.navigate('Gebruikers aanpassen')}/>
             <View style={styles.form}>
                 <View style={styles.grid}>
                     <View style={styles.gridRow}>

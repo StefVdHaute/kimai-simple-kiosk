@@ -17,15 +17,31 @@ export default function AddUserScreen({navigation}) {
         }
     }
 
+    const removeValue = async (key, value) => {
+        try {
+            const jsonValue = await AsyncStorage.getItem(key);
+            const data = jsonValue != null ? JSON.parse(jsonValue) : [];
+            const newData = data.filter(item => item !== value);
+            await AsyncStorage.setItem(key, JSON.stringify(newData));
+        } catch (e) {
+            console.log('Error removing ' + value.toString() + ' from ' + key + ': ', e);
+        }
+    }
+
      async function addUser (){
         await appendData('usernames', username);
+        navigation.goBack();
+    }
+
+    async function removeUser (){
+        await removeValue('usernames', username);
         navigation.goBack();
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.form}>
-                <Text style={styles.label}>Voeg gebruiker toe:</Text>
+                <Text style={styles.label}>Gebruikersnaam:</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Gebruikersnaam"
@@ -34,6 +50,7 @@ export default function AddUserScreen({navigation}) {
                 />
                 <View style={styles.gridRow}>
                     <Button style={styles.button} color="red" title="Annuleer" onPress={() => navigation.goBack()}/>
+                    <Button style={styles.button} color="red" title="Verwijder" onPress={() => navigation.goBack()}/>
                     <Button style={styles.button} title="Voeg toe" onPress={addUser}/>
                 </View>
             </View>

@@ -37,7 +37,7 @@ export default function LoginScreen({navigation}) {
 
     const handleLogin = () => {
         if (selectedUsername && password) {
-            navigation.navigate('PrikKlok', {username: selectedUsername})
+            navigation.navigate('Prikklok', {username: selectedUsername})
         } else {
             alert('Vul gebruikersnaam en wachtwoord in!');
         }

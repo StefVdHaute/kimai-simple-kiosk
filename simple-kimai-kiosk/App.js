@@ -12,7 +12,7 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator initialRouteName="Aanmelden">
                 <Stack.Screen name="Aanmelden" component={LoginScreen}/>
-                <Stack.Screen name="PrikKlok" component={PunchClockScreen}/>
+                <Stack.Screen name="Prikklok" component={PunchClockScreen}/>
                 <Stack.Screen name="Gebruikers aanpassen" component={AddUserScreen}/>
             </Stack.Navigator>
         </NavigationContainer>

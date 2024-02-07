@@ -10,10 +10,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen name="Login" component={LoginScreen}/>
-                <Stack.Screen name="PunchClock" component={PunchClockScreen}/>
-                <Stack.Screen name="AddUser" component={AddUserScreen}/>
+            <Stack.Navigator initialRouteName="Aanmelden">
+                <Stack.Screen name="Aanmelden" component={LoginScreen}/>
+                <Stack.Screen name="PrikKlok" component={PunchClockScreen}/>
+                <Stack.Screen name="Gebruiker toevoegen" component={AddUserScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

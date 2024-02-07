@@ -37,7 +37,7 @@ export default function LoginScreen({navigation}) {
 
     const handleLogin = () => {
         if (selectedUsername && password) {
-            navigation.navigate('PunchClock', {username: selectedUsername})
+            navigation.navigate('PrikKlok', {username: selectedUsername})
         } else {
             alert('Vul gebruikersnaam en wachtwoord in!');
         }
@@ -46,7 +46,7 @@ export default function LoginScreen({navigation}) {
     return (
         <View style={styles.container}>
             <Button style={styles.addUserBtn} title={'Voeg gebruiker toe'}
-                    onPress={() => navigation.navigate('AddUser')}/>
+                    onPress={() => navigation.navigate('Gebruiker toevoegen')}/>
             <View style={styles.form}>
                 <View style={styles.grid}>
                     <View style={styles.gridRow}>
@@ -71,7 +71,7 @@ export default function LoginScreen({navigation}) {
                         />
                     </View>
                 </View>
-                <Button title="Login" onPress={handleLogin}/>
+                <Button title="Aanmelden" onPress={handleLogin}/>
             </View>
         </View>
     );

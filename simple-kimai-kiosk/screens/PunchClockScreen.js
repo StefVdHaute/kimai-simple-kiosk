@@ -20,7 +20,7 @@ export default function PunchClockScreen({route, navigation}) {
 
     const logOut = () => {
         console.log('Logging out...')
-        navigation.navigate('Login');
+        navigation.navigate('Aanmelden');
     }
 
     const punchClock = () => {

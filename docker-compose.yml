@@ -1,0 +1,13 @@
+version: '2.4'
+
+services:
+  simple_kimai_kiosk:
+    image: simple_kimai_kiosk
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+volumes:
+  notused:

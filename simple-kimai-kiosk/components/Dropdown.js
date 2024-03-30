@@ -23,7 +23,7 @@ const Dropdown = ({options, onSelect, style}) => {
                         data={options}
                         renderItem={({item}) => (
                             <Pressable onPress={() => handleSelect(item)}
-                                              style={selectedOption === item ? [styles.option, styles.selectedOption] : styles.option}>
+                                       style={selectedOption === item ? [styles.option, styles.selectedOption] : styles.option}>
                                 <Text>{item}</Text>
                             </Pressable>
                         )}
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'relative',
         width: '100%',
+        flex: 1,
     },
     dropdownButton: {
         padding: 10,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
         maxHeight: 150,
-        zIndex: 100,
+        zIndex: 1000, // Adjust the zIndex value
     },
     option: {
         padding: 10,

@@ -1,8 +1,10 @@
 import {StyleSheet, Text, TextInput, View} from "react-native";
 import Dropdown from "../components/Dropdown";
-import {useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import Button from "../components/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {ping} from "../API";
+import {useFocusEffect} from "@react-navigation/native";
 
 export default function LoginScreen({navigation}) {
     const [usernames, setUsernames] = useState([]);
@@ -10,21 +12,19 @@ export default function LoginScreen({navigation}) {
     const [selectedUsername, setSelectedUsername] = useState(null);
     const [password, setPassword] = useState('');
 
-    const fetchData = async () => {
-        try {
-            setUsernames(await getData());
-            setLoading(false);
-        } catch (e) {
-            console.error('Error fetching data:', e);
-        }
-    };
-
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            fetchData();
-        });
-    });
-
+    useFocusEffect(
+        useCallback(() => {
+            try {
+                setPassword('');
+                getData().then(data => {
+                    setUsernames(data)
+                    setLoading(false);
+                });
+            } catch (e) {
+                console.error('Error fetching data:', e);
+            }
+        }, [])
+    )
 
     const getData = async () => {
         try {
@@ -35,13 +35,22 @@ export default function LoginScreen({navigation}) {
         }
     };
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (selectedUsername && password) {
-            navigation.navigate('Prikklok', {username: selectedUsername})
+            if (await ping(selectedUsername, password)) {
+                navigation.navigate('Prikklok', {username: selectedUsername, password: password});
+            } else {
+                alert('Gebruikersnaam of wachtwoord is onjuist!');
+            }
         } else {
             alert('Vul gebruikersnaam en wachtwoord in!');
         }
     };
+
+    const logout = () => {
+        setPassword('');
+        navigation.navigate('Aanmelden');
+    }
 
     return (
         <View style={styles.container}>
@@ -49,14 +58,13 @@ export default function LoginScreen({navigation}) {
                     onPress={() => navigation.navigate('Gebruikers aanpassen')}/>
             <View style={styles.form}>
                 <View style={styles.grid}>
-                    <View style={styles.gridRow}>
+                    <View style={[styles.gridRow, styles.dropDownHolder]}>
                         <Text style={styles.label}>Gebruikersnaam:</Text>
                         {
                             loading ?
                                 <Text>Loading...</Text> :
                                 usernames.length > 0 ?
-                                    <Dropdown style={{width: '100%', zIndex: '100'}} options={usernames}
-                                              onSelect={setSelectedUsername}/> :
+                                    <Dropdown options={usernames} onSelect={setSelectedUsername}/> :
                                     <Text>Geen gebruikers gevonden</Text>
                         }
                     </View>
@@ -68,6 +76,7 @@ export default function LoginScreen({navigation}) {
                             secureTextEntry
                             value={password}
                             onChangeText={setPassword}
+                            onSubmitEditing={handleLogin}
                         />
                     </View>
                 </View>
@@ -103,6 +112,7 @@ const styles = StyleSheet.create({
     },
     grid: {
         flex: 1,
+        zIndex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -111,6 +121,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         width: '100%',
+    },
+    dropDownHolder: {
+        zIndex: 10,
     },
     input: {
         borderWidth: 1,

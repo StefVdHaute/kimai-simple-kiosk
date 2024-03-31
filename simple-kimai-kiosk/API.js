@@ -1,3 +1,6 @@
+// TODO: use environment variables for HOST, PROJECT, ACTIVITY
+// It's a pain to set up and i tried for several hours to get it working
+// The docker containers had it but the code wouldn't read them, thanks react-native
 let HOST = 'http://192.168.1.20:8001';
 let PROJECT = 1;
 let ACTIVITY = 1;
@@ -7,6 +10,7 @@ export async function ping(username, password) {
         const response = await fetch(HOST + '/api/ping', {
             method: 'GET',
             headers: {
+                'Content-Type': 'application/json',
                 'X-AUTH-USER': username,
                 'X-AUTH-TOKEN': password,
             }
@@ -46,6 +50,7 @@ export async function getActiveTimer(username, password) {
         const response = await fetch(HOST + '/api/timesheets/active', {
             method: 'GET',
             headers: {
+                'Content-Type': 'application/json',
                 'X-AUTH-USER': username,
                 'X-AUTH-TOKEN': password
             }

@@ -3,11 +3,17 @@ import React, { useState, useEffect } from 'react';
 function Timer({ startTime }) {
     const [timeElapsed, setTimeElapsed] = useState(0);
 
+    const updateTimer = () => {
+        const currentTime = new Date();
+        const elapsedTime = currentTime - startTime;
+        setTimeElapsed(elapsedTime);
+    };
+
     useEffect(() => {
+        updateTimer();
+
         const intervalId = setInterval(() => {
-            const currentTime = new Date();
-            const elapsedTime = currentTime - startTime;
-            setTimeElapsed(elapsedTime);
+            updateTimer();
         }, 1000);
 
         return () => clearInterval(intervalId);

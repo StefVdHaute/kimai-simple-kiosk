@@ -1,33 +1,30 @@
-# pull base image
-ARG NODE_VERSION=latest
-FROM node:${NODE_VERSION} as build
-
+# ---- Base Node ----
+FROM node:lts AS base
+# Create app directory
 WORKDIR /app
 
+# ---- Dependencies ----
+FROM base AS dependencies
 COPY ./simple-kimai-kiosk/package.json ./simple-kimai-kiosk/package-lock.json ./
-
-# set node environment
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
-
-# install dependencies
+# install app dependencies including 'devDependencies'
 RUN npm install
 
-COPY ./simple-kimai-kiosk ./
+# ---- Copy Files/Build ----
+FROM dependencies AS build
+WORKDIR /app
+COPY ./simple-kimai-kiosk /app
+# Build react/vue/angular bundle static files
+RUN npm run build
 
-RUN npx expo export -p web
+# --- Release ----
+FROM nginx:latest AS release
+# Remove default nginx website
+RUN rm -rf /usr/share/nginx/html/* # is this needed?
 
-FROM nginx as production
+# Copy static files from build stage to nginx
+COPY --from=build /app/dist /usr/share/nginx/html/
 
-# set data to use for Kimai integration
-ARG KIMAI_URL
-# CUSTOMER_NAME can be left blank if only one customer
-ARG CUSTOMER_NAME
-ARG PROJECT_NAME=Default
-ENV KIMAI_URL $KIMAI_URL
-ENV CUSTOMER_NAME $CUSTOMER_NAME
-ENV PROJECT_NAME $PROJECT_NAME
+# Copy nginx configuration file
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN mkdir /app
-COPY --from=build /app/dist /app
-COPY ./nginx.conf /etc/nginx/nginx.conf
+CMD ["nginx", "-g", "daemon off;"]

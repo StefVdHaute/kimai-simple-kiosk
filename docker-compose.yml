@@ -1,13 +1,13 @@
-version: '2.4'
-
 services:
-  simple_kimai_kiosk:
-    image: simple_kimai_kiosk
+  simple-kimai-kiosk:
+    container_name: my-nginx-container
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:80"
-
-volumes:
-  notused:
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
